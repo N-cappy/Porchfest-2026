@@ -271,7 +271,9 @@ position: relative;
         height: auto !important;
         overflow: visible !important;
     }
-
+#timeSlider {
+    padding: 0 15px;   /* ✅ pushes handles inward */
+}
     #menu {
         position: fixed;
         bottom: -70%;
