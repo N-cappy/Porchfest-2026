@@ -407,7 +407,24 @@ position: relative;
     font-weight: bold !important; 
     margin-top: 10px;
 }
+#genreChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
+.chip {
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: #eee;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.chip.active {
+    background: #0077cc;
+    color: white;
+}
 #menu .filter-section:not(.active) {
     display: none;
 }
