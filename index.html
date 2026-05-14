@@ -311,7 +311,13 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Time": "str","Genre": "str"};
+
+
+
+
+
+			
+        var Filters = {"Time": "time","Genre": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -491,12 +497,14 @@
             reset_Time.innerHTML = 'clear filter';
             reset_Time.className = 'filterlabel';
             reset_Time.onclick = function() {
-                var options = document.getElementById("sel_Time").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
+            
+			reset_Time.onclick = function() {
+			    slider.noUiSlider.set([0, times.length - 1]);
+			    currentStart = times[0];
+			    currentEnd = times[times.length - 1];
+			    filterFunc();
+			};
+
             div_Time.appendChild(reset_Time);
             sel_Genre = document.createElement('select');
             sel_Genre.multiple = true;
