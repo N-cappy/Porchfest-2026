@@ -373,25 +373,44 @@
                     } catch(err){
                     }
                   }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
+
+				if (Filters[key] == "date"
+				  || Filters[key] == "datetime") {
+				
+				    try {
+				        if (key in features[0].properties) {
+				            HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+				
+				            startdate = document.getElementById("dat_" + HTMLkey + "_date1").value.replace(" ", "T");
+				            enddate = document.getElementById("dat_" + HTMLkey + "_date2").value.replace(" ", "T");
+				
+				            for (i = features.length - 1; i >= 0; --i) {
+				                if (features[i].properties[key] < startdate ||
+				                    features[i].properties[key] > enddate) {
+				                    features.splice(i, 1);
+				                }
+				            }
+				        }
+				    } catch(err){}
+				
+				}
+				
+					/* ✅ NEW TIME LOGIC (REPLACES OLD ONE) */
+					if (Filters[key] == "time") {
+					    try {
+					        if (key in features[0].properties) {
+					
+					            for (i = features.length - 1; i >= 0; --i) {
+					                var t = features[i].properties[key];
+					
+					                if (t < currentStart || t > currentEnd) {
+					                    features.splice(i, 1);
+					                }
+					            }
+					
+					        }
+					    } catch(err){}
+					}
                 }
               }
             } catch(err){
@@ -424,40 +443,46 @@
 // ✅ append to menu
 			document.getElementById("menu").appendChild(div_Time);
 			document.getElementById("menu").appendChild(div_Genre);
+			
+			var times = [
+			    "12:00 PM","12:15 PM","12:30 PM","12:40 PM","12:45 PM",
+			    "1:00 PM","1:20 PM","1:30 PM","1:45 PM",
+			    "2:00 PM","2:15 PM","2:30 PM","2:40 PM","2:45 PM",
+			    "3:00 PM","3:15 PM","3:20 PM","3:30 PM","3:45 PM",
+			    "4:00 PM","4:15 PM","4:30 PM","4:45 PM",
+			    "5:00 PM","5:30 PM"
+			];
+			
+			var currentStart = times[0];
+			var currentEnd = times[times.length - 1];
 
-            sel_Time = document.createElement('select');
-            sel_Time.multiple = true;
-            sel_Time.size = 10;
-            sel_Time.id = "sel_Time";
-            var Time_options_str = "<option value='' unselected></option>";
-            sel_Time.onchange = function(){filterFunc()};
-            Time_options_str  += '<option value="12:00 PM">12:00 PM</option>';
-            Time_options_str  += '<option value="12:15 PM">12:15 PM</option>';
-            Time_options_str  += '<option value="12:30 PM">12:30 PM</option>';
-            Time_options_str  += '<option value="12:40 PM">12:40 PM</option>';
-            Time_options_str  += '<option value="12:45 PM">12:45 PM</option>';
-            Time_options_str  += '<option value="1:00 PM">1:00 PM</option>';
-            Time_options_str  += '<option value="1:20 PM">1:20 PM</option>';
-            Time_options_str  += '<option value="1:30 PM">1:30 PM</option>';
-            Time_options_str  += '<option value="1:45 PM">1:45 PM</option>';
-            Time_options_str  += '<option value="2:00 PM">2:00 PM</option>';
-            Time_options_str  += '<option value="2:15 PM">2:15 PM</option>';
-            Time_options_str  += '<option value="2:30 PM">2:30 PM</option>';
-            Time_options_str  += '<option value="2:40 PM">2:40 PM</option>';
-            Time_options_str  += '<option value="2:45 PM">2:45 PM</option>';
-            Time_options_str  += '<option value="3:00 PM">3:00 PM</option>';
-            Time_options_str  += '<option value="3:15 PM">3:15 PM</option>';
-            Time_options_str  += '<option value="3:20 PM">3:20 PM</option>';
-            Time_options_str  += '<option value="3:30 PM">3:30 PM</option>';
-            Time_options_str  += '<option value="3:45 PM">3:45 PM</option>';
-            Time_options_str  += '<option value="4:00 PM">4:00 PM</option>';
-            Time_options_str  += '<option value="4:15 PM">4:15 PM</option>';
-            Time_options_str  += '<option value="4:30 PM">4:30 PM</option>';
-            Time_options_str  += '<option value="4:45 PM">4:45 PM</option>';
-            Time_options_str  += '<option value="5:00 PM">5:00 PM</option>';
-            Time_options_str  += '<option value="5:30 PM">5:30 PM</option>';
-            sel_Time.innerHTML = Time_options_str;
-            div_Time.appendChild(sel_Time);
+			var slider = document.createElement('div');
+			slider.id = "timeSlider";
+			div_Time.appendChild(slider);
+			var timeDisplay = document.createElement("div");
+			timeDisplay.id = "timeLabel";
+			div_Time.appendChild(timeDisplay);
+
+			noUiSlider.create(slider, {
+			    start: [0, times.length - 1],
+			    connect: true,
+			    step: 1,
+			    range: {
+			        min: 0,
+			        max: times.length - 1
+			    }
+			});
+
+			slider.noUiSlider.on("update", function(values) {
+			    currentStart = times[Math.round(values[0])];
+			    currentEnd = times[Math.round(values[1])];
+			
+			    timeDisplay.innerHTML = currentStart + " → " + currentEnd;
+			});
+		
+			slider.noUiSlider.on("change", function() {
+			    filterFunc();   // ✅ reuse your system
+			});
             var lab_Time = document.createElement('div');
             lab_Time.innerHTML = 'Time';
             lab_Time.className = 'filterlabel';
