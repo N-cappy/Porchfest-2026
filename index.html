@@ -312,7 +312,22 @@
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
 			//POSSIBLE MOVE SLIDER STUFF HERE//
-        var Filters = {"Time": "time","Genre": "str"};
+        var Filters = {"Time": "time","Genre": "str"};	
+		var genreGroups = {
+		    "ROCK": ["ROCK", "ALT", "INDIE", "GARAGE", "GRUNGE", "PUNK"],
+		    "FOLK": ["FOLK", "AMERICANA", "ROOTS"],
+		    "JAZZ": ["JAZZ", "SWING"],
+		    "POP": ["POP"],
+		    "ACOUSTIC": ["ACOUSTIC"],
+		    "COVERS": ["COVER", "TRIBUTE"],
+		    "BLUES": ["BLUES"],
+		    "COUNTRY": ["COUNTRY"],
+		    "WORLD": ["AFRO", "IRISH", "CAJUN", "INTERNATIONAL"],
+		    "FUNK": ["FUNK", "SOUL", "DISCO"],
+		    "HIP HOP": ["HIP HOP"],
+		    "ELECTRONIC": ["ELECTRONIC", "DJ"]
+		};
+
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -320,16 +335,26 @@
             try{
               for (key in Filters){
                 keyS = key.replace(/[^a-zA-Z0-9_]/g, "")	  
+
 		if (key == "Genre") {
 		    for (i = features.length - 1; i >= 0; --i) {
-		        var g = features[i].properties["Genre"];
+		        var g = features[i].properties["Genre"].toUpperCase();
 		        var match = false;
+		
 		        for (var j = 0; j < selectedGenres.length; j++) {
-		            if (g.toUpperCase().includes(selectedGenres[j])) {
-		                match = true;
-		                break;
+		
+		            var group = genreGroups[selectedGenres[j]];
+		
+		            for (var k = 0; k < group.length; k++) {
+		                if (g.includes(group[k])) {
+		                    match = true;
+		                    break;
+		                }
 		            }
+		
+		            if (match) break;
 		        }
+		
 		        if (selectedGenres.length > 0 && !match) {
 		            features.splice(i, 1);
 		        }
@@ -337,6 +362,7 @@
 		
 		    continue;
 		}
+
                 if (Filters[key] == "str" || Filters[key] == "bool"){
 				var selection = [];
 				var select = document.getElementById("sel_" + keyS);
