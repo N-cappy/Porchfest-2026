@@ -401,11 +401,10 @@ position: relative;
     overflow: hidden;
     box-sizing: border-box;
 }
-
 #timeLabel {
     text-align: center;
-    font-size: 18px;   /* 🔥 increase this */
-    font-weight: bold; /* optional but looks better */
+    font-size: 18px !important;  
+    font-weight: bold !important; 
     margin-top: 10px;
 }
 
