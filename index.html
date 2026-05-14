@@ -311,12 +311,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-
-
-
-
-
-			
+			//POSSIBLE MOVE SLIDER STUFF HERE//
         var Filters = {"Time": "time","Genre": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
@@ -326,11 +321,13 @@
               for (key in Filters){
                 keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
                 if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
+				var selection = [];
+				var select = document.getElementById("sel_" + keyS);
+				if (!select) continue;   // ✅ skip if element doesn't exist
+				var options = select.options;
+				for (var i = 0; i < options.length; i++) {
+				    if (options[i].selected) selection.push(options[i].value);
+				}
                     try{
                       if (key in features[0].properties){
                         for (i = features.length - 1;
@@ -496,8 +493,6 @@
             var reset_Time = document.createElement('div');
             reset_Time.innerHTML = 'clear filter';
             reset_Time.className = 'filterlabel';
-            reset_Time.onclick = function() {
-            
 			reset_Time.onclick = function() {
 			    slider.noUiSlider.set([0, times.length - 1]);
 			    currentStart = times[0];
