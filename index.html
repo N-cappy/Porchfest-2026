@@ -711,19 +711,22 @@
 			// ✅ test first with a few genres
 			var testGenres = ["ROCK", "JAZZ", "FOLK", "POP"];
 			
-			testGenres.forEach(function(value) {
+
+			for (var groupName in genreGroups) {
 			
 			    var chip = document.createElement("div");
 			    chip.className = "chip";
-			    chip.innerHTML = value;
+			    chip.innerHTML = groupName;
 			
 			    chip.onclick = function() {
 			
-			        if (chip.classList.contains("active")) {
-			            chip.classList.remove("active");
+			        var value = this.innerHTML;  // ✅ IMPORTANT fix
+			
+			        if (this.classList.contains("active")) {
+			            this.classList.remove("active");
 			            selectedGenres = selectedGenres.filter(v => v !== value);
 			        } else {
-			            chip.classList.add("active");
+			            this.classList.add("active");
 			            selectedGenres.push(value);
 			        }
 			
@@ -731,8 +734,7 @@
 			    };
 			
 			    chipContainer.appendChild(chip);
-			});
-
+			}
             var lab_Genre = document.createElement('div');
             lab_Genre.innerHTML = 'Genre';
             lab_Genre.className = 'filterlabel';
