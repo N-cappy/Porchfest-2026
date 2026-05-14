@@ -774,14 +774,18 @@ if (key == "Genre") {
             var reset_Genre = document.createElement('div');
             reset_Genre.innerHTML = 'clear filter';
             reset_Genre.className = 'filterlabel';
-            reset_Genre.onclick = function() {
-                var options = document.getElementById("sel_Genre").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-          
+			reset_Genre.onclick = function() {
+			
+			    // ✅ clear selected genres array
+			    selectedGenres = [];
+			
+			    // ✅ remove active class from ALL chips
+			    var chips = document.querySelectorAll("#genreChips .chip");
+			    chips.forEach(function(chip) {
+			        chip.classList.remove("active");
+			    });
+			    filterFunc();  // ✅ reapply filter
+			};
 div_Genre.appendChild(reset_Genre);
 
 document.addEventListener("DOMContentLoaded", function() {
