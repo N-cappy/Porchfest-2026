@@ -398,6 +398,7 @@ position: relative;
 #menu .filterselect {
     width: 100%;
     max-height: 40vh;
+	overflow: visible;
     overflow-y: auto;
     box-sizing: border-box;
 }
