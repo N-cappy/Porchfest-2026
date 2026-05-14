@@ -346,32 +346,58 @@
               for (key in Filters){
                 keyS = key.replace(/[^a-zA-Z0-9_]/g, "")	  
 
-		if (key == "Genre") {
-		    for (i = features.length - 1; i >= 0; --i) {
-		        var g = features[i].properties["Genre"].toUpperCase();
-		        var match = false;
-		
-		        for (var j = 0; j < selectedGenres.length; j++) {
-		
-		            var group = genreGroups[selectedGenres[j]];
-		
-		            for (var k = 0; k < group.length; k++) {
-		                if (g.includes(group[k])) {
-		                    match = true;
-		                    break;
-		                }
-		            }
-		
-		            if (match) break;
-		        }
-		
-		        if (selectedGenres.length > 0 && !match) {
-		            features.splice(i, 1);
-		        }
-		    }
-		
-		    continue;
-		}
+
+if (key == "Genre") {
+
+    for (i = features.length - 1; i >= 0; --i) {
+        var g = features[i].properties["Genre"].toUpperCase();
+
+        var match = false;
+        var matchedAnyGroup = false;
+
+        // ✅ check ALL groups to see if it belongs anywhere
+        for (var groupName in genreGroups) {
+            var group = genreGroups[groupName];
+
+            for (var k = 0; k < group.length; k++) {
+                if (g.includes(group[k])) {
+                    matchedAnyGroup = true;
+                    break;
+                }
+            }
+            if (matchedAnyGroup) break;
+        }
+	        for (var j = 0; j < selectedGenres.length; j++) {
+	
+	            var selected = selectedGenres[j];
+	
+	            // ✅ HANDLE OTHER separately
+	            if (selected == "OTHER") {
+	                if (!matchedAnyGroup) {
+	                    match = true;
+	                    break;
+	                }
+	            } else {
+	                var group = genreGroups[selected];
+	
+	                for (var k = 0; k < group.length; k++) {
+	                    if (g.includes(group[k])) {
+	                        match = true;
+	                        break;
+	                    }
+	                }
+	
+	                if (match) break;
+	            }
+	        }
+	
+	        if (selectedGenres.length > 0 && !match) {
+	            features.splice(i, 1);
+	        }
+	    }
+	
+	    continue;
+	}
 
                 if (Filters[key] == "str" || Filters[key] == "bool"){
 				var selection = [];
@@ -481,11 +507,11 @@
 		var div_Genre = document.createElement('div');
 			div_Genre.id = "div_Genre";
 
-// ✅ add BOTH classes properly
+//  add BOTH classes properly
 			div_Time.classList.add("filter-section", "filterselect");
 			div_Genre.classList.add("filter-section", "filterselect");
 
-// ✅ hide both initially
+//  hide both initially
 			
 		if (window.innerWidth <= 768) {
    		 div_Time.classList.remove("active");
@@ -494,7 +520,6 @@
    		 div_Time.classList.add("active");
    		 div_Genre.classList.add("active");
 }
-// ✅ append to menu
 			document.getElementById("menu").appendChild(div_Time);
 			document.getElementById("menu").appendChild(div_Genre);
 			
@@ -711,7 +736,6 @@
             Genre_options_str  += '<option value="WHIMSICAL AND WISTFUL INDIE FOLK">WHIMSICAL AND WISTFUL INDIE FOLK</option>';
             Genre_options_str  += '<option value="WORLD, EARLY, AND AMERICAN">WORLD, EARLY, AND AMERICAN</option>';
             sel_Genre.innerHTML = Genre_options_str;
-           // div_Genre.appendChild(sel_Genre);//
 			var chipContainer = document.createElement("div");
 			chipContainer.id = "genreChips";
 			div_Genre.appendChild(chipContainer);
@@ -780,13 +804,13 @@ if (timeBtn) {
             return;
         }
 
-        // ✅ OPEN & FULL RESET (KEY ADDITION)
+        // OPEN & FULL RESET (KEY ADDITION)
         menu.classList.add("open");
 
         timeDiv.classList.remove("active");
         genreDiv.classList.remove("active");
 
-        // ✅ ACTIVATE ONLY TIME
+        //  ACTIVATE ONLY TIME
         timeDiv.classList.add("active");
     });
 }
