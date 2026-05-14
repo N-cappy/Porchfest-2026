@@ -658,7 +658,38 @@
             Genre_options_str  += '<option value="WHIMSICAL AND WISTFUL INDIE FOLK">WHIMSICAL AND WISTFUL INDIE FOLK</option>';
             Genre_options_str  += '<option value="WORLD, EARLY, AND AMERICAN">WORLD, EARLY, AND AMERICAN</option>';
             sel_Genre.innerHTML = Genre_options_str;
-            div_Genre.appendChild(sel_Genre);
+           // div_Genre.appendChild(sel_Genre);//
+			var chipContainer = document.createElement("div");
+			chipContainer.id = "genreChips";
+			div_Genre.appendChild(chipContainer);
+			
+			var selectedGenres = [];
+	
+			// ✅ test first with a few genres
+			var testGenres = ["ROCK", "JAZZ", "FOLK", "POP"];
+			
+			testGenres.forEach(function(value) {
+			
+			    var chip = document.createElement("div");
+			    chip.className = "chip";
+			    chip.innerHTML = value;
+			
+			    chip.onclick = function() {
+			
+			        if (chip.classList.contains("active")) {
+			            chip.classList.remove("active");
+			            selectedGenres = selectedGenres.filter(v => v !== value);
+			        } else {
+			            chip.classList.add("active");
+			            selectedGenres.push(value);
+			        }
+			
+			        filterFunc();
+			    };
+			
+			    chipContainer.appendChild(chip);
+			});
+
             var lab_Genre = document.createElement('div');
             lab_Genre.innerHTML = 'Genre';
             lab_Genre.className = 'filterlabel';
