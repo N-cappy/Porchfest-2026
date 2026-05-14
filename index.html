@@ -459,10 +459,10 @@
 
 			var slider = document.createElement('div');
 			slider.id = "timeSlider";
-			div_Time.appendChild(slider);
 			var timeDisplay = document.createElement("div");
 			timeDisplay.id = "timeLabel";
-
+			div_Time.appendChild(timeDisplay);
+			div_Time.appendChild(slider);
 			noUiSlider.create(slider, {
 			    start: [0, times.length - 1],
 			    connect: true,
@@ -470,7 +470,6 @@
 			    range: {
 			        min: 0,
 			        max: times.length - 1
-			div_Time.appendChild(timeDisplay);
 			    }
 			});
 
