@@ -319,7 +319,17 @@
             features = this[lyr["options"]["dataVar"]].features.slice(0);
             try{
               for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")	  
+		if (key == "Genre") {
+		    for (i = features.length - 1; i >= 0; --i) {
+		        var g = features[i].properties["Genre"];
+		
+		        if (selectedGenres.length > 0 && !selectedGenres.includes(g)) {
+		            features.splice(i, 1);
+		        }
+		    }
+		    continue;  // ✅ IMPORTANT: skip old dropdown logic
+		}
                 if (Filters[key] == "str" || Filters[key] == "bool"){
 				var selection = [];
 				var select = document.getElementById("sel_" + keyS);
