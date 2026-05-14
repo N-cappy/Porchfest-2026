@@ -271,8 +271,20 @@ position: relative;
         height: auto !important;
         overflow: visible !important;
     }
+	
 #timeSlider {
-    padding: 0 15px;   /* ✅ pushes handles inward */
+    padding: 0 15px;
+}
+
+#div_Time {
+    overflow: visible;
+}
+
+.noUi-handle {
+    width: 30px !important;
+    height: 30px !important;
+    top: -14px !important;
+    border-radius: 50%;
 }
     #menu {
         position: fixed;
